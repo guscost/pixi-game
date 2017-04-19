@@ -1,17 +1,9 @@
 // Main game module
-const game = (() => {
+var game = (function () {
 
-  // Make handlers for arrow keys
-  keyboard.add('ArrowUp');
-  keyboard.add('ArrowDown');
-  keyboard.add('ArrowLeft');
-  keyboard.add('ArrowRight');
-
-  // Start the game
+  // Start game and run game loop
   start();
-
-  // Update every FPS interval for 30 FPS
-  setInterval(update, 1000/30);
+  setInterval(update, 1000/60);
 
   // Module API
   return {
