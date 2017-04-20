@@ -41,6 +41,9 @@ function start() {
   state.cat.xvel = 50;
   state.cat.yvel = -10;
 
+  // Set up level
+  levels.loadLevel();
+
   // Don't need to save or return anything because state is global
   return;
 }

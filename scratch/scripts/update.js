@@ -62,6 +62,11 @@ function update () {
     state.cat.jumpAvailable = 0;
   }
 
+  // Collision Detection
+  state.level.platforms.forEach(function (platform) {
+
+  });
+
   // Don't need to save or return anything because state is global
   return;
 }
