@@ -64,6 +64,19 @@ function update () {
 
   // Collision Detection
   state.level.platforms.forEach(function (platform) {
+    var xOverlap = 
+      state.cat.x >= platform.x && 
+      state.cat.x <= (platform.x + platform.width);
+
+    var yCrossing =
+      state.cat.y <= platform.y &&
+      state.cat.y + state.cat.yvel >= platform.y
+
+    if (xOverlap && yCrossing) {
+      state.cat.y = platform.y;
+      state.cat.yvel = 0;
+      state.cat.contact = true;
+    }
 
   });
 

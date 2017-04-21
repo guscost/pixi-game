@@ -25,9 +25,15 @@ var levels = (function () {
     state.level = {};
     state.level.platforms = [];
 
-    var platform = createPlatform(200);
-    state.app.stage.addChild(platform);
-    state.level.platforms.push(platform);
+    for (var i = 0; i < 10; i++) {
+      var width = 200
+      var platform = createPlatform(width);
+      state.app.stage.addChild(platform);
+      state.level.platforms.push(platform);
+      platform.x = i * 80;
+      platform.y = 520 - i * 40;
+      platform.width = width;
+    }
   }
 
   // Public API

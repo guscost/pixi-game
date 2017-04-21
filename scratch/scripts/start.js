@@ -31,6 +31,9 @@ function start() {
   state.stats.yvelReport.x = 800;
   state.stats.yvelReport.y = 60;
 
+  // Set up level
+  levels.loadLevel();
+
   // Cat Sprite
   state.cat = new PIXI.Sprite.fromImage('images/cat.png');
   state.app.stage.addChild(state.cat);
@@ -40,9 +43,6 @@ function start() {
   state.cat.y = 300;
   state.cat.xvel = 50;
   state.cat.yvel = -10;
-
-  // Set up level
-  levels.loadLevel();
 
   // Don't need to save or return anything because state is global
   return;
