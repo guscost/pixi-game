@@ -37,8 +37,10 @@ function start() {
   // Cat Sprite
   state.cat = new PIXI.Sprite.fromImage('images/cat.png');
   state.level.addChild(state.cat);
+  state.cat.scale.x = 2;
+  state.cat.scale.y = 2;
   state.cat.pivot.x = 16;
-  state.cat.pivot.y = 16;
+  state.cat.pivot.y = 20;
   state.cat.x = 480;
   state.cat.y = 300;
   state.cat.xvel = 0;

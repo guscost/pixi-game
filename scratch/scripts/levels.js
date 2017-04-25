@@ -6,7 +6,7 @@ var levels = (function () {
     // Add platforms
     var platform = new PIXI.Graphics();
     platform.x = x;
-    platform.y = y;
+    platform.y = 540 - y;
     platform.width = width;
 
     // set a fill and line style
@@ -28,10 +28,16 @@ var levels = (function () {
     state.level.platforms = [];
 
     // Add platforms to define level
-    state.level.platforms.push(createPlatform(120, 460, 160));
-    state.level.platforms.push(createPlatform(260, 420, 180));
-    state.level.platforms.push(createPlatform(400, 360, 160));
-    state.level.platforms.push(createPlatform(200, 380, 160));
+    state.level.platforms.push(createPlatform(100, 100, 160));
+    state.level.platforms.push(createPlatform(250, 180, 180));
+    state.level.platforms.push(createPlatform(400, 230, 160));
+    state.level.platforms.push(createPlatform(600, 300, 180));
+    state.level.platforms.push(createPlatform(800, 220, 160));
+    state.level.platforms.push(createPlatform(1000, 300, 180));
+    state.level.platforms.push(createPlatform(1200, 230, 160));
+    state.level.platforms.push(createPlatform(1400, 300, 180));
+    state.level.platforms.push(createPlatform(1600, 280, 160));
+    state.level.platforms.push(createPlatform(1800, 320, 180));
 
     // Add each platform to our level container
     state.level.platforms.forEach(function (platform) {
