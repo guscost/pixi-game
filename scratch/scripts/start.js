@@ -3,6 +3,7 @@ function start() {
 
   // Global State Object
   state = {};
+  state.score = 0;
 
   // Set up the application element
   state.app = new PIXI.Application(
@@ -22,14 +23,18 @@ function start() {
 
   // Stats text
   state.stats = {};
+  state.stats.scoreReport = new PIXI.Text('', state.statStyle);
+  state.app.stage.addChild(state.stats.scoreReport);
+  state.stats.scoreReport.x = 800;
+  state.stats.scoreReport.y = 30;
   state.stats.xvelReport = new PIXI.Text('', state.statStyle);
   state.app.stage.addChild(state.stats.xvelReport);
   state.stats.xvelReport.x = 800;
-  state.stats.xvelReport.y = 30;
+  state.stats.xvelReport.y = 60;
   state.stats.yvelReport = new PIXI.Text('', state.statStyle);
   state.app.stage.addChild(state.stats.yvelReport);
   state.stats.yvelReport.x = 800;
-  state.stats.yvelReport.y = 60;
+  state.stats.yvelReport.y = 90;
 
   // Set up level
   levels.loadLevel();
@@ -40,7 +45,7 @@ function start() {
   state.cat.pivot.x = 32;
   state.cat.pivot.y = 50;
   state.cat.x = 480;
-  state.cat.y = 300;
+  state.cat.y = 800;
   state.cat.xvel = 0;
   state.cat.yvel = 0;
 

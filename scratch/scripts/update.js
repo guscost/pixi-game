@@ -2,6 +2,7 @@
 function update () {
 
   // Report diagnostics
+  state.stats.scoreReport.text = 'Score: ' + state.score;
   state.stats.xvelReport.text = 'X Vel: ' + state.cat.xvel.toFixed(3);
   state.stats.yvelReport.text = 'Y Vel: ' + state.cat.yvel.toFixed(3);
 
@@ -62,7 +63,7 @@ function update () {
     state.cat.jumpAvailable = 0;
   }
 
-  // Collision Detection
+  // Platform collision detection
   state.level.platforms.forEach(function (platform) {
     var xOverlap = 
       state.cat.x >= platform.x && 
@@ -77,7 +78,21 @@ function update () {
       state.cat.yvel = 0;
       state.cat.contact = true;
     }
+  });
 
+  // Pickup collision detection
+  state.level.pickups.forEach(function (pickup) {
+    if (!pickup.collected) {
+      var xSquared = Math.pow(pickup.x - state.cat.x, 2);
+      var ySquared = Math.pow(pickup.y - state.cat.y, 2);
+      var distance = Math.sqrt(xSquared + ySquared);
+
+      if (distance < 30) {
+        pickup.collected = true;
+        state.score++;
+        state.level.removeChild(pickup);
+      }
+    }
   });
 
   // Special case: falling off anything means no contact
