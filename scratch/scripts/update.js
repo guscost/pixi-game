@@ -11,9 +11,9 @@ function update () {
 
   // Face direction of movement
   if (state.cat.xvel < 0) {
-    state.cat.scale.x = -2;
+    state.cat.scale.x = -1;
   } else if (state.cat.xvel > 0) {
-    state.cat.scale.x = 2;
+    state.cat.scale.x = 1;
   }
 
   // Gravity pushes on the cat
