@@ -14,7 +14,7 @@ function start() {
   state.container.appendChild(state.app.view);
 
   // Stats text style
-  const statStyle = new PIXI.TextStyle({
+  state.statStyle = new PIXI.TextStyle({
     fontFamily: 'Helvetica',
     fontSize: 20,
     fill: ['#E44450', '#E44459'],
@@ -22,11 +22,11 @@ function start() {
 
   // Stats text
   state.stats = {};
-  state.stats.xvelReport = new PIXI.Text('', statStyle);
+  state.stats.xvelReport = new PIXI.Text('', state.statStyle);
   state.app.stage.addChild(state.stats.xvelReport);
   state.stats.xvelReport.x = 800;
   state.stats.xvelReport.y = 30;
-  state.stats.yvelReport = new PIXI.Text('', statStyle);
+  state.stats.yvelReport = new PIXI.Text('', state.statStyle);
   state.app.stage.addChild(state.stats.yvelReport);
   state.stats.yvelReport.x = 800;
   state.stats.yvelReport.y = 60;
@@ -36,7 +36,7 @@ function start() {
 
   // Cat Sprite
   state.cat = new PIXI.Sprite.fromImage('images/cat.png');
-  state.app.stage.addChild(state.cat);
+  state.level.addChild(state.cat);
   state.cat.pivot.x = 16;
   state.cat.pivot.y = 16;
   state.cat.x = 480;

@@ -6,8 +6,8 @@ function update () {
   state.stats.yvelReport.text = 'Y Vel: ' + state.cat.yvel.toFixed(3);
 
   // Move the cat
-  state.cat.x = state.cat.x + state.cat.xvel;
-  state.cat.y = state.cat.y + state.cat.yvel;
+  state.cat.x = Math.round(state.cat.x + state.cat.xvel);
+  state.cat.y = Math.round(state.cat.y + state.cat.yvel);
 
   // Face direction of movement
   if (state.cat.xvel < 0) {
@@ -28,8 +28,8 @@ function update () {
   }
 
   // Walls block the cat
-  if (state.cat.x > 940) {
-    state.cat.x = 940;
+  if (state.cat.x > 2000) {
+    state.cat.x = 2000;
     state.cat.xvel = 0;
   } else if (state.cat.x < 20) {
     state.cat.x = 20;
@@ -84,6 +84,9 @@ function update () {
   if (state.cat.yvel > 0) {
     state.cat.contact = false;
   }
+
+  // Scroll horizontally
+  state.level.x = Math.max(state.cat.x - 480, 0) * -1;
 
   // Don't need to save or return anything because state is global
   return;
