@@ -28,8 +28,9 @@ var levels = (function () {
     state.level.platforms = [];
 
     // Add platforms to define level
-    state.level.platforms.push(createPlatform(100, 860, 160));
-    state.level.platforms.push(createPlatform(160, 420, 130));
+    state.level.platforms.push(createPlatform(120, 460, 160));
+    state.level.platforms.push(createPlatform(260, 420, 180));
+    state.level.platforms.push(createPlatform(400, 360, 160));
     state.level.platforms.push(createPlatform(200, 380, 160));
 
     // Add each platform to our level container

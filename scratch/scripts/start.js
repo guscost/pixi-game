@@ -41,8 +41,8 @@ function start() {
   state.cat.pivot.y = 16;
   state.cat.x = 480;
   state.cat.y = 300;
-  state.cat.xvel = 50;
-  state.cat.yvel = -10;
+  state.cat.xvel = 0;
+  state.cat.yvel = 0;
 
   // Don't need to save or return anything because state is global
   return;
