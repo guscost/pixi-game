@@ -70,7 +70,7 @@ function update () {
 
     var yCrossing =
       state.cat.y <= platform.y &&
-      state.cat.y + state.cat.yvel >= platform.y
+      state.cat.y + state.cat.yvel >= platform.y;
 
     if (xOverlap && yCrossing) {
       state.cat.y = platform.y;
@@ -79,6 +79,11 @@ function update () {
     }
 
   });
+
+  // Special case: falling off anything means no contact
+  if (state.cat.yvel > 0) {
+    state.cat.contact = false;
+  }
 
   // Don't need to save or return anything because state is global
   return;
