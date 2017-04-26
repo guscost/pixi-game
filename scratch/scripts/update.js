@@ -88,6 +88,7 @@ function update () {
       var distance = Math.sqrt(xSquared + ySquared);
 
       if (distance < 30) {
+        sounds.collect.play();
         pickup.collected = true;
         state.score++;
         state.level.removeChild(pickup);
