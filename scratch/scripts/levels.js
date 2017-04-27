@@ -1,13 +1,94 @@
 // Game levels module
 var levels = (function () {
 
+  // Level definitions
+  var level1 = `
+----------------------------------------------------------------
+----------------------------------------------------------------
+----------------------------------------------------------------
+----------------------------------------------------------------
+----------------------------------------------------------------
+----------p-----------------------------------------------------
+---------xxx----------------------------------------------------
+----------------------------------------------------------------
+----------------------------------------------------------------
+----xxx---------------------------------------------------------
+----------------------------------------------------------------
+----------------------------------------------------------------
+`;
+
+
+
+  // Level parser and generator function
+  function generateLevel(level) {
+    var platforms = [];
+    var pickups = [];
+    var lines = level.trim().split('\n');
+
+    lines.forEach(function (line, lineIndex) {
+      var chars = line.split('');
+      var specs = null;
+
+      chars.forEach(function (char, charIndex) {
+
+        // Don't care about casing
+        char = char.toLowerCase();
+
+        // This piece manages `specs` and creates platforms as needed
+        if (char !== 'x' && specs) {
+          platforms.push(createPlatform(specs.x, specs.y, specs.width));
+          specs = null;
+        } else if (char === 'x') {
+          if (specs) {
+            specs.width += 45;
+          } else {
+            specs = { x: charIndex * 45, y: lineIndex * 45 + 25, width: 45 }
+          }
+        }
+
+        // This piece creates pickups as needed
+        if (char === 'p') {
+          pickups.push(createPickup(
+            charIndex * 45 + 45/2, 
+            lineIndex * 45 + 54
+          ));
+        }
+
+      });
+
+      if (specs) { 
+        platforms.push(createPlatform(specs.x, specs.y, specs.width));
+      }
+
+    });
+
+    // Now add everything to the state and draw it
+    state.level = new PIXI.Container();
+    state.level.platforms = platforms;
+    state.level.pickups = pickups;
+
+    // Add each platform to our level container
+    platforms.forEach(function (platform) {
+      state.level.addChild(platform);
+    });
+
+    // Add each pickup to our level container
+    pickups.forEach(function (pickup) {
+      state.level.addChild(pickup);
+    });
+
+    // Add level container to the main game stage
+    state.app.stage.addChild(state.level);
+
+  }
+
   // Platform creator
   function createPlatform(x, y, width) {
 
     // Add platforms
     var platform = new PIXI.Graphics();
     platform.x = x;
-    platform.y = 540 - y;
+    platform.y = y;
     platform.width = width;
 
     // set a fill and line style
@@ -27,58 +108,15 @@ var levels = (function () {
   function createPickup(x, y) {
     var pickup = new PIXI.Sprite.fromImage('images/ball.png');
     pickup.x = x;
-    pickup.y = 540 - y;
+    pickup.y = y;
     pickup.pivot.x = 16;
     pickup.pivot.y = 16;
     return pickup;
   }
 
-  // Loader function
-  function loadLevel() {
-    state.level = new PIXI.Container();
-    state.level.platforms = [];
-    state.level.pickups = [];
-
-    // Add platforms to define level
-    state.level.platforms.push(createPlatform(100, 100, 160));
-    state.level.platforms.push(createPlatform(250, 180, 180));
-    state.level.platforms.push(createPlatform(400, 230, 160));
-    state.level.platforms.push(createPlatform(600, 300, 180));
-    state.level.platforms.push(createPlatform(800, 220, 160));
-    state.level.platforms.push(createPlatform(1000, 300, 180));
-    state.level.platforms.push(createPlatform(1200, 230, 160));
-    state.level.platforms.push(createPlatform(1400, 300, 180));
-    state.level.platforms.push(createPlatform(1600, 280, 160));
-    state.level.platforms.push(createPlatform(1800, 320, 180));
-
-    // Add each platform to our level container
-    state.level.platforms.forEach(function (platform) {
-      state.level.addChild(platform);
-    });
-
-    // Create pickups
-    state.level.pickups.push(createPickup(180, 116));
-    state.level.pickups.push(createPickup(340, 196));
-    state.level.pickups.push(createPickup(480, 246));
-    state.level.pickups.push(createPickup(690, 316));
-
-    // Add each pickup to our level container
-    state.level.pickups.forEach(function (pickup) {
-      state.level.addChild(pickup);
-    });
-
-    // Add end-of-level marker
-    state.level.endText = new PIXI.Text('End!', state.statStyle);
-    state.level.endText.x = 2000;
-    state.level.endText.y = 400;
-    state.level.addChild(state.level.endText);
-
-    // Add level container to the main game stage
-    state.app.stage.addChild(state.level);
-  }
-
   // Public API
   return {
-    loadLevel: loadLevel
+    level1: level1,
+    generateLevel: generateLevel
   };
 })();

@@ -37,7 +37,7 @@ function start() {
   state.stats.yvelReport.y = 90;
 
   // Set up level
-  levels.loadLevel();
+  levels.generateLevel(levels.level1);
 
   // Cat Sprite
   state.cat = new PIXI.Sprite.fromImage('images/cat.png');
