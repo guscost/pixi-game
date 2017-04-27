@@ -18,7 +18,7 @@ function update () {
   }
 
   // Gravity pushes on the cat
-  state.cat.yvel += 2;
+  state.cat.yvel += 1;
   state.cat.xvel /= 1.2;
 
   // Ground blocks the cat
@@ -40,14 +40,14 @@ function update () {
   // Key inputs
   if (keyboard.keys['ArrowRight'].down) {
     state.cat.xvel = Math.min(
-      state.cat.xvel + (state.cat.contact ? 4 : 3),
-      12
+      state.cat.xvel + (state.cat.contact ? 3 : 2),
+      8
     );
   } 
   if (keyboard.keys['ArrowLeft'].down) {
     state.cat.xvel = Math.max(
-      state.cat.xvel - (state.cat.contact ? 4 : 3), 
-      -12
+      state.cat.xvel - (state.cat.contact ? 3 : 2), 
+      -8
     );
   }
 
@@ -87,7 +87,7 @@ function update () {
       var ySquared = Math.pow(pickup.y - state.cat.y, 2);
       var distance = Math.sqrt(xSquared + ySquared);
 
-      if (distance < 30) {
+      if (distance < 32) {
         sounds.collect.play();
         pickup.collected = true;
         state.score++;

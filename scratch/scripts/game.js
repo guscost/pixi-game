@@ -4,8 +4,8 @@ var game = (function () {
   // Set up the game
   start();
 
-  // Update every FPS interval for 30 FPS
-  setInterval(update, 1000/30);
+  // Update every FPS interval for 60 FPS
+  setInterval(update, 1000/60);
 
   // Make handlers for arrow keys
   keyboard.add('ArrowUp');
