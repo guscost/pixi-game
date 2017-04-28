@@ -4,14 +4,14 @@ var levels = (function () {
   // Level definitions
   var level1 = `
 ----------------------------------------------------------------
-----------------------------------------------------------------
-----------------------------------------------------------------
-----------------------------------------------------------------
-----------------------------------------------------------------
-----------p-----------------------------------------------------
----------xxx----------------------------------------------------
-----------------------------------------------------------------
-----------------------------------------------------------------
+----------------------------------p-----------------------------
+---------------------------------xxx----------------------------
+---------------------------pp-----------------------------------
+--------------------------xxxx----------------------------------
+--------------------pp------------------------------------------
+----------p--------xxxx-----------------------------------------
+---------xxx---aa-----------------------------------------------
+-----p--------xxx-----------------------------------------------
 ----xxx---------------------------------------------------------
 ----------------------------------------------------------------
 ----------------------------------------------------------------
@@ -23,6 +23,7 @@ var levels = (function () {
   function generateLevel(level) {
     var platforms = [];
     var pickups = [];
+    var actors = [];
     var lines = level.trim().split('\n');
 
     lines.forEach(function (line, lineIndex) {
@@ -54,6 +55,14 @@ var levels = (function () {
           ));
         }
 
+        // This piece parses actors
+        if (char === 'a') {
+          actors.push(createActor(
+            charIndex * 45 + 45/2, 
+            lineIndex * 45 + 54
+          ));
+        }
+
       });
 
       if (specs) { 
@@ -66,6 +75,7 @@ var levels = (function () {
     state.level = new PIXI.Container();
     state.level.platforms = platforms;
     state.level.pickups = pickups;
+    state.level.actors = actors;
 
     // Add each platform to our level container
     platforms.forEach(function (platform) {
@@ -75,6 +85,11 @@ var levels = (function () {
     // Add each pickup to our level container
     pickups.forEach(function (pickup) {
       state.level.addChild(pickup);
+    });
+
+    // Add each actor to our level container
+    actors.forEach(function (actor) {
+      state.level.addChild(actor);
     });
 
     // Add level container to the main game stage
@@ -112,6 +127,19 @@ var levels = (function () {
     pickup.pivot.x = 16;
     pickup.pivot.y = 16;
     return pickup;
+  }
+
+  // Actor creator
+  function createActor(x, y) {
+    var actor = new PIXI.Sprite.fromImage('images/actor.png');
+    actor.x = x;
+    actor.y = y;
+    actor.xvel = 1;
+    actor.yvel = 0;
+    actor.pivot.x = 16;
+    actor.pivot.y = 36;
+    actor.active = true;
+    return actor;
   }
 
   // Public API

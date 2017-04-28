@@ -1,3 +1,55 @@
+
+function move(sprite) {
+  sprite.x = Math.round(sprite.x + sprite.xvel);
+  sprite.y = Math.round(sprite.y + sprite.yvel);
+}
+
+function fall(sprite) {
+  sprite.yvel += 1;
+}
+
+function checkBounds(sprite) {
+  // Ground blocks the sprite
+  if (sprite.y > 520) {
+    sprite.y = 520;
+    sprite.yvel = 0;
+    sprite.contact = true;
+  }
+
+  // Walls block the sprite
+  if (sprite.x > 2000) {
+    sprite.x = 2000;
+    sprite.xvel = 0;
+  } else if (sprite.x < 20) {
+    sprite.x = 20;
+    sprite.xvel = 0;
+  }
+}
+
+function distance (sprite1, sprite2) {
+  var xSquared = Math.pow(sprite2.x - sprite1.x, 2);
+  var ySquared = Math.pow(sprite2.y - sprite1.y, 2);
+  return Math.sqrt(xSquared + ySquared);
+}
+
+function collideWithPlatforms(sprite, platforms) {
+  platforms.forEach(function (platform) {
+    var xOverlap = 
+      sprite.x >= platform.x && 
+      sprite.x <= (platform.x + platform.width);
+
+    var yCrossing =
+      sprite.y <= platform.y &&
+      sprite.y + sprite.yvel >= platform.y;
+
+    if (xOverlap && yCrossing) {
+      sprite.y = platform.y;
+      sprite.yvel = 0;
+      sprite.contact = true;
+    }
+  });
+}
+
 // Game update script ("game loop")
 function update () {
 
@@ -7,8 +59,7 @@ function update () {
   state.stats.yvelReport.text = 'Y Vel: ' + state.cat.yvel.toFixed(3);
 
   // Move the cat
-  state.cat.x = Math.round(state.cat.x + state.cat.xvel);
-  state.cat.y = Math.round(state.cat.y + state.cat.yvel);
+  move(state.cat);
 
   // Face direction of movement
   if (state.cat.xvel < 0) {
@@ -18,24 +69,11 @@ function update () {
   }
 
   // Gravity pushes on the cat
-  state.cat.yvel += 1;
+  fall(state.cat);
   state.cat.xvel /= 1.2;
 
-  // Ground blocks the cat
-  if (state.cat.y > 520) {
-    state.cat.y = 520;
-    state.cat.yvel = 0;
-    state.cat.contact = true;
-  }
-
-  // Walls block the cat
-  if (state.cat.x > 2000) {
-    state.cat.x = 2000;
-    state.cat.xvel = 0;
-  } else if (state.cat.x < 20) {
-    state.cat.x = 20;
-    state.cat.xvel = 0;
-  }
+  // Check level bounds
+  checkBounds(state.cat);
 
   // Key inputs
   if (keyboard.keys['ArrowRight'].down) {
@@ -63,37 +101,60 @@ function update () {
     state.cat.jumpAvailable = 0;
   }
 
-  // Platform collision detection
-  state.level.platforms.forEach(function (platform) {
-    var xOverlap = 
-      state.cat.x >= platform.x && 
-      state.cat.x <= (platform.x + platform.width);
-
-    var yCrossing =
-      state.cat.y <= platform.y &&
-      state.cat.y + state.cat.yvel >= platform.y;
-
-    if (xOverlap && yCrossing) {
-      state.cat.y = platform.y;
-      state.cat.yvel = 0;
-      state.cat.contact = true;
-    }
-  });
+  // Collide cat with all platforms
+  collideWithPlatforms(state.cat, state.level.platforms);
 
   // Pickup collision detection
   state.level.pickups.forEach(function (pickup) {
     if (!pickup.collected) {
-      var xSquared = Math.pow(pickup.x - state.cat.x, 2);
-      var ySquared = Math.pow(pickup.y - state.cat.y, 2);
-      var distance = Math.sqrt(xSquared + ySquared);
-
-      if (distance < 32) {
+      if (distance(state.cat, pickup) < 32) {
         sounds.collect.play();
         pickup.collected = true;
         state.score++;
         state.level.removeChild(pickup);
       }
     }
+  });
+
+  // Actor logic
+  state.level.actors.forEach(function (actor) {
+
+    // Move the actor
+    move(actor);
+    fall(actor);
+    checkBounds(actor);
+
+    // Collide this actor with all platforms
+    var oldX = actor.x;
+    var oldY = actor.y;
+    collideWithPlatforms(actor, state.level.platforms);
+    if (!actor.contact) {
+      actor.y = oldY;
+      actor.x = oldX;
+      actor.xvel = actor.xvel * -1;
+      actor.contact = true;
+    }
+
+    // Collide with the player
+    if (actor.active) {
+      if (distance(state.cat, actor) < 40) {
+
+        if (state.cat.y > actor.y) {
+          sounds.collect.play();
+          actor.active = false;
+          state.score++;
+          state.level.removeChild(state.cat);
+        } else {
+          state.level.removeChild(actor);
+        }
+      }
+    }
+
+    // Special case: falling off anything means no contact
+    if (actor.yvel > 0) {
+      actor.contact = false;
+    }
+
   });
 
   // Special case: falling off anything means no contact
